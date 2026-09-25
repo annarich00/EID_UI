@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Space Defense EID Prototype</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<header><div><p class="eyebrow">CHAPTER IV · INTERACTIVE RECONSTRUCTION</p><h1>Space defense mission planning</h1></div><div class="badge">● CURRENT STATE</div></header>
+<main>
+  <section class="intro"><h2>Ecological Interface Design</h2><p>Choose a mission-level goal—not a thruster vector. The prototype makes the resulting trade-offs directly visible: separation, fuel, sensor coverage, and vulnerability.</p></section>
+  <section class="dashboard" aria-label="Mission constraints">
+    <article class="metric"><span>Relative distance</span><strong id="distance">{{ state.distance_km }} km</strong><small>Defender ↔ adversary</small></article>
+    <article class="metric"><span>Fuel reserve</span><strong id="fuel">{{ state.fuel_percent }}%</strong><div class="bar"><i id="fuel-bar" style="width: {{ state.fuel_percent }}%"></i></div></article>
+    <article class="metric"><span>Sensor coverage</span><strong id="coverage">{{ state.coverage_percent }}%</strong><div class="bar blue"><i id="coverage-bar" style="width: {{ state.coverage_percent }}%"></i></div></article>
+    <article class="metric danger"><span>Vulnerability overlap</span><strong id="vulnerability">{{ state.vulnerability_percent }}%</strong><small>Lower is safer</small></article>
+  </section>
+  <section class="workbench">
+    <article class="panel goals"><p class="eyebrow">MANEUVER PLANNING PANEL</p><h2>Select a desired end state</h2><button data-goal="separate"><b>Separate</b><span>Increase distance and leave the engagement zone</span></button><button data-goal="inspect"><b>Inspect</b><span>Close in for remote observation</span></button><button data-goal="coverage"><b>Preserve coverage</b><span>Improve sensor footprint over the target</span></button><p id="plan" class="plan" aria-live="polite">Select a goal to preview a maneuver.</p><button id="commit" class="commit" disabled>Commit maneuver to timeline</button></article>
+    <article class="panel zone"><p class="eyebrow">ENGAGEMENT / VULNERABILITY ZONES</p><div class="orbit"><div class="engagement">Adversary<br>engagement zone</div><div class="sat adversary">A</div><div id="defender" class="sat defender">D</div></div><div class="legend"><span><i class="dot defender-dot"></i>Defending spacecraft</span><span><i class="dot adversary-dot"></i>Adversary spacecraft</span></div><p>The spatial display replaces numerical comparison with a directly perceivable safety relationship.</p></article>
+  </section>
+  <section class="panel timeline"><p class="eyebrow">Situation Awareness Timeline</p><h2>Current and projected mission state</h2><div class="track"><div class="now">NOW</div><div id="event" class="event">No planned maneuver</div></div><p id="projection">Choose a goal to see its projected constraints. This is a scenario model, not an orbital-dynamics calculation.</p></section>
+  <section class="note"><strong>About this reconstruction.</strong> A minimal interactive interpretation of Chapter IV (Figures 35–51) of Justin E. Oryschak’s 2020 thesis. It demonstrates the EID concepts described there: goal-based maneuver selection, visible constraints, engagement/vulnerability zones, and a perception–action timeline. Values are illustrative rather than thesis data.</section>
+</main>
+<script>window.initialState = {{ state|tojson }};</script><script src="{{ url_for('static', filename='app.js') }}"></script>
+</body></html>
