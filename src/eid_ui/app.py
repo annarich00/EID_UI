@@ -3,6 +3,7 @@ from dataclasses import asdict
 from flask import Flask, jsonify, render_template
 
 from .model import MissionState, plan_for_goal
+from .scenario import SCENARIO_STEPS
 
 
 def create_app() -> Flask:
@@ -11,6 +12,10 @@ def create_app() -> Flask:
     @app.get("/")
     def dashboard():
         return render_template("index.html", state=asdict(MissionState()))
+
+    @app.get("/api/scenario")
+    def scenario():
+        return jsonify(steps=[asdict(step) for step in SCENARIO_STEPS])
 
     @app.get("/api/plan/<goal>")
     def plan(goal: str):
